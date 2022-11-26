@@ -213,6 +213,7 @@ namespace upc
 			//
 			// Update old_prob, new_prob and inc_prob in order to stop the loop if logprob does not
 			// increase more than inc_threshold.
+			em_expectation
 			if (verbose & 01)
 				cout << "GMM nmix=" << nmix << "\tite=" << iteration << "\tlog(prob)=" << new_prob << "\tinc=" << inc_prob << endl;
 		}
@@ -270,7 +271,7 @@ namespace upc
 		return nmix;
 	}
 
-	int GMM::random_init(const upc::fmatrix &data, unsigned int nmix) {
+	int GMM::random_init(const upc::fmatrix &data, unsigned int nmix) {   //nmix: numerod e gausianas por muestra
 		if (data.nrow() == 0 or data.ncol() == 0)
 			return -1;
 		resize(nmix, data.ncol());
