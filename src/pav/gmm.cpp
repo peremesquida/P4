@@ -213,7 +213,12 @@ namespace upc
 			//
 			// Update old_prob, new_prob and inc_prob in order to stop the loop if logprob does not
 			// increase more than inc_threshold.
+<<<<<<< HEAD
 			em_expectation
+=======
+			new_prob=em_expectation(data,weights);
+			em_maximization(data,weights);
+>>>>>>> 2f60477929ee45537e8cf8234b23b2efabf52b61
 			if (verbose & 01)
 				cout << "GMM nmix=" << nmix << "\tite=" << iteration << "\tlog(prob)=" << new_prob << "\tinc=" << inc_prob << endl;
 		}
