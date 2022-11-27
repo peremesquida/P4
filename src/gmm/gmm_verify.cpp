@@ -25,9 +25,12 @@ float verify(const GMM &gmm_candidate, const fmatrix &dat)
 {
 
 	//TODO: implement verification score based on gmm of the candidate
-	float score = 0.0F;
+	
+	// \FET Retorna nombre de señal; nombre del locutor teórico y el log de la verosimilitud
+	/* the return value is an informative values to be printed as debug information.
+	  The decision is based on the returned value*/
 
-	return score;
+	return gmm_candidate.logprob(dat);
 }
 
 
@@ -35,14 +38,15 @@ float verify(const GMM &gmm_candidate, const GMM & gmm_world, const fmatrix &dat
 {
 
 	//TODO: implement verification score based on gmm of the candidate and 'world' model
+	// \FET: Retorna la diferencia entre el log. de la verosimilitud dado modelo del candidato y uno del mundo
 	/*
 	  lprobcand is an informative values to be printed as debug information.
 	  The decision is based on the returned value
 	 */
 	float score = 0.0F;
-	lprobcand = 0.0F;
-	lprobbackground = 0.0F;
-
+	lprobcand = gmm_candidate.logprob(dat);
+	lprobbackground = gmm_world.logprob(dat);
+	score=lprobcand-lprobbackground;
 	return score;
 
 }
