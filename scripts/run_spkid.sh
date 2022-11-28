@@ -22,6 +22,7 @@ w=work
 name_exp=one
 db_devel=spk_8mu/speecon
 db_test=spk_8mu/sr_test
+world=users_and_others 
 
 # Ficheros de resultados del reconocimiento y verificación
 LOG_CLASS=$w/class_${FEAT}_${name_exp}.log
@@ -160,7 +161,7 @@ for cmd in $*; do
        # Implement 'trainworld' in order to get a Universal Background Model for speaker verification
        #
        # - The name of the world model will be used by gmm_verify in the 'verify' command below.
-       echo "Implement the trainworld option ..."
+       echo gmm_train -d $w/$FEAT -e lp -g $w/gmm/$FEAT/world.gmm -m 5 -N 10 -T 0.0001 -i 0 lists/verif/$world.train
 
    elif [[ $cmd == verify ]]; then
        ## @file
