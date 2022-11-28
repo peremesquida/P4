@@ -115,7 +115,7 @@ namespace upc
 			/// \FET Al tractar-se de logaritmes, fem ell sumatori per totes les dades.
 			lprob += gmm_logprob(data[n]);
 		}
-		return lprob/data.nrow();
+		return lprob/n;
 	}
 
 	int GMM::centroid(const upc::fmatrix &data) {
