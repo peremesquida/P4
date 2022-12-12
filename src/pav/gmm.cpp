@@ -112,7 +112,7 @@ namespace upc
 
 		for (n=0; n<data.nrow(); ++n) {
 			/// \TODO Compute the logprob of a single frame of the input data; you can use gmm_logprob() above.
-			/// \FET Al tractar-se de logaritmes, fem ell sumatori per totes les dades.
+			/// \ FET Para obtener la logprob total hacemos una suma acumulativa de cada una de las tramas, para posteriormente hacer la media.
 			lprob += gmm_logprob(data[n]);
 		}
 		return lprob/n;
@@ -215,12 +215,18 @@ namespace upc
 			//
 			// Update old_prob, new_prob and inc_prob in order to stop the loop if logprob does not
 			// increase more than inc_threshold.
-			/// \MIRARFET
-
+			/// \Revisar 
 			new_prob=em_expectation(data,weights);
 			em_maximization(data,weights);
-			if (verbose & 01)
+			inc_prob = new_prob - old_prob;
+			old_prob=new_prob;
+			if (verbose & 01){
 				cout << "GMM nmix=" << nmix << "\tite=" << iteration << "\tlog(prob)=" << new_prob << "\tinc=" << inc_prob << endl;
+		}
+		if(fabs(inc_prob) < inc_threshold){
+			return 0;
+
+		}
 		}
 		return 0;
 	}
@@ -276,7 +282,7 @@ namespace upc
 		return nmix;
 	}
 
-	int GMM::random_init(const upc::fmatrix &data, unsigned int nmix) {   //nmix: numerod e gausianas por muestra
+	int GMM::random_init(const upc::fmatrix &data, unsigned int nmix) {
 		if (data.nrow() == 0 or data.ncol() == 0)
 			return -1;
 		resize(nmix, data.ncol());

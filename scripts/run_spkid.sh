@@ -23,7 +23,10 @@ name_exp=one
 db_devel=spk_8mu/speecon
 db_test=spk_8mu/sr_test
 world=users_and_others
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3f63f1a5b53b5e1e74d37495a00eb3a14bda3f0a
 # Ficheros de resultados del reconocimiento y verificación
 LOG_CLASS=$w/class_${FEAT}_${name_exp}.log
 LOG_VERIF=$w/verif_${FEAT}_${name_exp}.log
@@ -130,12 +133,13 @@ for cmd in $*; do
    if [[ $cmd == train ]]; then
        ## @file
        # \TODO
+       # \Revisar Se ha echo una modificacion al numero de gaussianas(actualmente 5)
        # Select (or change) good parameters for gmm_train
        # \FET Hemos cambiado el numero de gausianas
        for dir in $db_devel/BLOCK*/SES* ; do
            name=${dir/*\/}
            echo $name ----
-           EXEC="gmm_train -v 1 -T 0.001 -N 5 -m 3 -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train"
+           EXEC="gmm_train -v 1 -T 0.001 -N 5 -m 6 -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$name.gmm $lists/class/$name.train"
            echo $EXEC && $EXEC || exit 1
            echo
        done
@@ -161,7 +165,12 @@ for cmd in $*; do
        # Implement 'trainworld' in order to get a Universal Background Model for speaker verification
        #
        # - The name of the world model will be used by gmm_verify in the 'verify' command below.
+<<<<<<< HEAD
        gmm_train -d $w/$FEAT/ -e $FEAT -g world.gmm -m 5 -N 10 -T 0.0001 -i 0 lists/verif/$world.train
+=======
+      EXEC="gmm_train -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$world.gmm -m 5 -N 10 -T 0.0001 -i 0  lists/verif/$world.train"
+      echo  $EXEC && $EXEC || exit 1
+>>>>>>> 3f63f1a5b53b5e1e74d37495a00eb3a14bda3f0a
 
    elif [[ $cmd == verify ]]; then
        ## @file
@@ -170,6 +179,10 @@ for cmd in $*; do
        #
        # - The standard output of gmm_verify must be redirected to file $LOG_VERIF.
        #   For instance:
+       
+       EXEC="gmm_verify -d $w/$FEAT/ -e $FEAT -D $w/gmm/$FEAT/ -E gmm -w $world lists/gmm.list lists/verif/all.test lists/verif/all.test.candidates"
+       echo $EXEC && $EXEC | tee $LOG_VERIF || exit 1
+
        #   * <code> gmm_verify ... > $LOG_VERIF </code>
        #   * <code> gmm_verify ... | tee $LOG_VERIF </code>
        echo "Implement the verify option ..."
@@ -181,7 +194,7 @@ for cmd in $*; do
        fi
        # You can pass the threshold to spk_verif_score.pl or it computes the
        # best one for these particular results.
-       spk_verif_score $LOG_VERIF | tee $LOG_VERIF
+       spk_verif_score $LOG_VERIF | tee -a $LOG_VERIF
 
    elif [[ $cmd == finalclass ]]; then
        ## @file
