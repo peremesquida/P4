@@ -177,7 +177,7 @@ for cmd in $*; do
 
        #   * <code> gmm_verify ... > $LOG_VERIF </code>
        #   * <code> gmm_verify ... | tee $LOG_VERIF </code>
-       echo "Implement the verify option ..."
+       echo $EXEC && $EXEC | tee $TEMP_VERIF || exit 1
 
    elif [[ $cmd == verifyerr ]]; then
        if [[ ! -s $LOG_VERIF ]] ; then
@@ -186,7 +186,7 @@ for cmd in $*; do
        fi
        # You can pass the threshold to spk_verif_score.pl or it computes the
        # best one for these particular results.
-       spk_verif_score $LOG_VERIF | tee -a $LOG_VERIF
+       spk_verif_score $TEMP_VERIF | tee -a $LOG_VERIF
 
    elif [[ $cmd == finalclass ]]; then
        ## @file
