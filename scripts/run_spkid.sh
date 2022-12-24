@@ -101,7 +101,11 @@ compute_mfcc() {
     shift
     for filename in $(sort $*); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
+<<<<<<< HEAD
         EXEC="wav2mfcc 24 $db_devel/$filename.wav $w/$FEAT/$filename.$FEAT"               #falta comprobar el valor óptimo
+=======
+        EXEC="wav2mfcc 24 $db_devel/$filename.wav $w/$FEAT/$filename.$FEAT"    #20;falta comprobar el valor óptimo
+>>>>>>> 8ba7f6aaf25ccdf38f6ee88654b921a384007b92
         echo $EXEC && $EXEC || exit 1
     done
 }
@@ -223,7 +227,7 @@ for cmd in $*; do
        echo $EXEC && $EXEC | tee $TEMP_VERIF || exit 1      
 
        perl -ane 'print "$F[0]\t$F[1]\t";
-            if ($F[2] > 0.335578177519398) {print "1\n"}
+            if ($F[2] > 0.646768094880005) {print "1\n"}
             else {print "0\n"}' $TEMP_VERIF | tee $FINAL_VERIF 
    
    # If the command is not recognize, check if it is the name
