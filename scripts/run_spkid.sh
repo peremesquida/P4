@@ -17,6 +17,7 @@ set -o pipefail
 # - name_exp: name of the experiment
 # - db_devel: directory of the speecon database used during development
 # - db_test:  directory of the database used in the final test
+# \FET Variables creades
 lists=lists
 w=work
 name_exp=one
@@ -81,7 +82,7 @@ compute_lp() {
     shift
     for filename in $(sort $*); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-        EXEC="wav2lp 8 $db_devel/$filename.wav $w/$FEAT/$filename.$FEAT"
+        EXEC="wav2lp 8 $db_devel/$filename.wav $w/$FEAT/$filename.$FEAT"  #20
         echo $EXEC && $EXEC || exit 1
     done
 }
@@ -91,7 +92,7 @@ compute_lpcc() {
     shift
     for filename in $(sort $*); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-        EXEC="wav2lpcc 14 $db_devel/$filename.wav $w/$FEAT/$filename.$FEAT"           #falta comprobar el valor óptimo
+        EXEC="wav2lpcc 14 $db_devel/$filename.wav $w/$FEAT/$filename.$FEAT"    #20 25;falta comprobar el valor óptimo
         echo $EXEC && $EXEC || exit 1
     done
 }
@@ -101,7 +102,7 @@ compute_mfcc() {
     shift
     for filename in $(sort $*); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-        EXEC="wav2mdcc 24 $db_devel/$filename.wav $w/$FEAT/$filename.$FEAT"               #falta comprobar el valor óptimo
+        EXEC="wav2mdcc 24 $db_devel/$filename.wav $w/$FEAT/$filename.$FEAT"    #20;falta comprobar el valor óptimo
         echo $EXEC && $EXEC || exit 1
     done
 }
@@ -131,7 +132,7 @@ for cmd in $*; do
        # \TODO
        # \Revisar Se ha echo una modificacion al numero de gaussianas(actualmente 5)
        # Select (or change) good parameters for gmm_train
-       # \FET Hemos cambiado el numero de gausianas
+       # \FET Hemos cambiado el numero de gausianas    -T 1e-6 -N 64 -m 32
        for dir in $db_devel/BLOCK*/SES* ; do
            name=${dir/*\/}
            echo $name ----
@@ -161,6 +162,7 @@ for cmd in $*; do
        # Implement 'trainworld' in order to get a Universal Background Model for speaker verification
        #
        # - The name of the world model will be used by gmm_verify in the 'verify' command below.
+       # \FET
       EXEC="gmm_train -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$world.gmm -m 5 -N 10 -T 0.0001 -i 0  lists/verif/$world.train"
       echo  $EXEC && $EXEC || exit 1
 
@@ -171,6 +173,7 @@ for cmd in $*; do
        #
        # - The standard output of gmm_verify must be redirected to file $LOG_VERIF.
        #   For instance:
+       # \FET
        
        EXEC="gmm_verify -d $w/$FEAT/ -e $FEAT -D $w/gmm/$FEAT/ -E gmm -w $world lists/gmm.list lists/verif/all.test lists/verif/all.test.candidates"
        echo $EXEC && $EXEC | tee $LOG_VERIF || exit 1
