@@ -162,12 +162,8 @@ for cmd in $*; do
        # Implement 'trainworld' in order to get a Universal Background Model for speaker verification
        #
        # - The name of the world model will be used by gmm_verify in the 'verify' command below.
-<<<<<<< HEAD
-      EXEC="gmm_train -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$world.gmm -m 5 -N 10 -T 0.0001 -i 0  lists/verif/$world.train"                          #Aqui
-=======
        # \FET
       EXEC="gmm_train -d $w/$FEAT -e $FEAT -g $w/gmm/$FEAT/$world.gmm -m 5 -N 10 -T 0.0001 -i 0  lists/verif/$world.train"
->>>>>>> 9db7c5dc3628cefd4b11a6c91f58e34b475075bf
       echo  $EXEC && $EXEC || exit 1
 
    elif [[ $cmd == verify ]]; then
