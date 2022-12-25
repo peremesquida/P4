@@ -55,7 +55,7 @@ int main(int argc, const char *argv[])
 	///
 	/// Other alternatives are: vq, em_split... See the options of the program and place each
 	/// initicialization accordingly.
-	/// \FET Afegits els casos 1 2 i default
+	/// \FET Afegits els casos 
 	switch (init_method) {
 		case 0:
 		gmm.random_init(data,nmix);
@@ -67,8 +67,7 @@ int main(int argc, const char *argv[])
 		gmm.vq_lbg(data, nmix, init_iterations, init_threshold, verbose);
 			break;
 		default:
-		gmm.random_init(data, nmix);
-			;
+		;
 	}
 
 	/// \TODO Apply EM to estimate GMM parameters (complete the funcion in gmm.cpp)
