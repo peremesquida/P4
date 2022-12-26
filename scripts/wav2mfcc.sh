@@ -17,14 +17,15 @@ cleanup() {
    \rm -f $base.*
 }
 
-if [[ $# != 3 ]]; then
-   echo "$0 mfcc_order input.wav output.mfcc"
+if [[ $# != 4 ]]; then
+   echo "$0 mfcc_order mfcc_banks input.wav output.mfcc"
    exit 1
 fi
 
 mfcc_order=$1
-inputfile=$2
-outputfile=$3
+mfcc_banks=$2
+inputfile=$3
+outputfile=$4
 
 UBUNTU_SPTK=1
 if [[ $UBUNTU_SPTK == 1 ]]; then
@@ -32,7 +33,10 @@ if [[ $UBUNTU_SPTK == 1 ]]; then
    X2X="sptk x2x"
    FRAME="sptk frame"
    WINDOW="sptk window"
+<<<<<<< HEAD
    LPC="sptk lpc"
+=======
+>>>>>>> c5ea66f7c748439718464a6cd1e2974f5f0a53d5
    MFCC="sptk mfcc"
 else
    # or install SPTK building it from its source
@@ -44,7 +48,7 @@ fi
 
 # Main command for feature extration
 sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
-	$MFCC -s 8 -l 240 -m $mfcc_order -n 32 -w 1 > $base.mfcc || exit 1
+	$MFCC -w 1 -s 8 -l 240 -m $mfcc_order -n $mfcc_banks > $base.mfcc || exit 1
    
 
 # Our array files need a header with the number of cols and rows:
