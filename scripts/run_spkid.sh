@@ -81,11 +81,7 @@ compute_lp() {
     shift
     for filename in $(sort $*); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-<<<<<<< HEAD
-        EXEC="wav2lp 8 $db_devel/$filename.wav $w/$FEAT/$filename.$FEAT"
-=======
         EXEC="wav2lp 20 $db_devel/$filename.wav $w/$FEAT/$filename.$FEAT"  #20
->>>>>>> c5ea66f7c748439718464a6cd1e2974f5f0a53d5
         echo $EXEC && $EXEC || exit 1
     done
 }
@@ -95,11 +91,7 @@ compute_lpcc() {
     shift
     for filename in $(sort $*); do
         mkdir -p `dirname $w/$FEAT/$filename.$FEAT`
-<<<<<<< HEAD
-        EXEC="wav2lpcc 14 $db_devel/$filename.wav $w/$FEAT/$filename.$FEAT"           #falta comprobar el valor óptimo
-=======
         EXEC="wav2lpcc 20 25 $db_devel/$filename.wav $w/$FEAT/$filename.$FEAT"    #20 25;falta comprobar el valor óptimo
->>>>>>> c5ea66f7c748439718464a6cd1e2974f5f0a53d5
         echo $EXEC && $EXEC || exit 1
     done
 }
