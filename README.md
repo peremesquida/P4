@@ -70,7 +70,7 @@ ejercicios indicados.
   salida de SPTK (líneas 45 a 51 del script `wav2lp.sh`).
   
   
-Para conseguir la matriz fmatrix necesitamos calcular el número  de filas ($nrow) y columnas ($ncol), las columnas las calculamos con el orden del predictor y les sumamos 1($lpc_order+1) debido ya que en el primer elemento del vector de predicción se almacena la ganancia del predictor. Para determinar el número de filas, hemos de tener en cuenta la longitud de la señal y la lomgitud y desplazamiento de ventana que le aplicamos a dicha señal. Utilianzo el comando `sox` transformamos los datos del tipo float al tipo ascii y finalmente contamos las líneas con el comando wc-1 e imprimimos en pantalla, separando filas y columnas con un salto de línea usando "perl -ne".
+Para conseguir la matriz fmatrix necesitamos calcular el número  de filas ($nrow) y columnas ($ncol), las columnas las calculamos con el orden del predictor y les sumamos 1($lpc_order+1) debido ya que en el primer elemento del vector de predicción se almacena la ganancia del predictor. Para determinar el número de filas, hemos de tener en cuenta la longitud de la señal y la lomgitud y desplazamiento de ventana que le aplicamos a dicha señal. Utilianzo el comando `sox` transformamos los datos del tipo float al tipo ascii y finalmente contamos las líneas con el comando <code>wc-1</code> e imprimimos en pantalla, separando filas y columnas con un salto de línea usando <code>perl -ne</code>.
 
 En el script wav2lp.sh encontramos el siguiente pipeline principal:
 
@@ -86,12 +86,28 @@ cat $base.lp >> $outputfile
   
 
   * ¿Por qué es más conveniente el formato *fmatrix* que el SPTK?
+  
+  *fmatrix* nos permite pasarle un fichero de datos (en nuestro caso     "base.lp") y nos lo "ordena" como float en "nrow" filas y "ncol"       columnas.
+  De esta forma, con <code>fmatrix_show</code> podremos ver los datos de   forma sencilla, y situarnos en la posición de la matriz que nos         interesa sabiendo el número del audio para encontrar los coeficientes   de este, que en nuestro caso son los coeficientes 2 y 3.
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
+  
+   Main command for feature extration
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+  sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+	$LPC -l 240 -m $lpc_order | $LPCC -m $lpc_order -M $lpcc_order > $base.lpcc
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
   fichero <code>scripts/wav2mfcc.sh</code>:
+  
+  Main command for feature extration
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+  sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 180 -p 100 | $WINDOW -l 180 -L 180 |
+	$MFCC -s $fm -l 180 -m $mfcc_order -n $melbank_order > $base.mfcc
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 ### Extracción de características.
 
@@ -100,6 +116,76 @@ cat $base.lp >> $outputfile
   
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
+    
+    - Orden para obtener el fichero de texto LP:
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+      fmatrix_show work/lp/BLOCK01/SES017/*.lp | egrep '^\[' | cut -f4,5 > lp_2_3.txt
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    - Orden para obtener el fichero de texto LPCC:
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+      fmatrix_show work/lpcc/BLOCK01/SES017/*.lpcc | egrep '^\[' | cut -f4,5 > lpcc_2_3.txt
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    - Orden para obtener el fichero de texto MFCC:
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+      fmatrix_show work/mfcc/BLOCK01/SES017/*.mfcc | egrep '^\[' | cut -f4,5 > mfcc_2_3.txt
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    A partir de los fichers generados, representamos las gráficas a aprtir de siguente código python:
+    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+    import matplotlib.pyplot as plt
+
+    # LP
+    X, Y = [], []
+    for line in open('lp_2_3.txt', 'r'):
+      values = [float(s) for s in line.split()]
+      X.append(values[0])
+      Y.append(values[1])
+    plt.figure(1)
+    plt.plot(X, Y, 'rx', markersize=4)
+    plt.savefig('lp_2_3.png')
+    plt.title('LP',fontsize=20)
+    plt.grid()
+    plt.xlabel('a(2)')
+    plt.ylabel('a(3)')
+    plt.savefig('lp_2_3.png')
+    plt.show()
+
+    # LPCC
+    X, Y = [], []
+    for line in open('lpcc_2_3.txt', 'r'):
+      values = [float(s) for s in line.split()]
+      X.append(values[0])
+      Y.append(values[1])
+    plt.figure(2)
+    plt.plot(X, Y, 'rx', markersize=4)
+    plt.savefig('lpcc_2_3.png')
+    plt.title('LPCC',fontsize=20)
+    plt.grid()
+    plt.xlabel('c(2)')
+    plt.ylabel('c(3)')
+    plt.savefig('lpcc_2_3.png')
+    plt.show()
+
+    # MFCC
+    X, Y = [], []
+    for line in open('mfcc_2_3.txt', 'r'):
+      values = [float(s) for s in line.split()]
+      X.append(values[0])
+      Y.append(values[1])
+    plt.figure(3)
+    plt.plot(X, Y, 'rx', markersize=4)
+    plt.savefig('mfcc_2_3.png')
+    plt.title('MFCC',fontsize=20)
+    plt.grid()
+    plt.xlabel('mc(2)')
+    plt.ylabel('mc(3)')
+    plt.savefig('mfcc_2_3.png')
+    plt.show()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
   + ¿Cuál de ellas le parece que contiene más información?
 
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
