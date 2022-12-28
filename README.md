@@ -32,9 +32,58 @@ ejercicios indicados.
 - Analice el script `wav2lp.sh` y explique la misión de los distintos comandos involucrados en el *pipeline*
   principal (`sox`, `$X2X`, `$FRAME`, `$WINDOW` y `$LPC`). Explique el significado de cada una de las 
   opciones empleadas y de sus valores.
+  
+  * `sox` nos permite transformar una señal de entrada sin cabecera a una del fromato indicado. También nos permite transformar las  señales guradadas en un programa externo. Al fiechero de entrada se le pueden aplicar las siguientes opciones:
+  
+    - `-t`: Formato de audio.
+    - `e`: Referente a la codificación que queremos aplicar (signed-integer, unsigned-integer, etc.). 
+    - `b`: Indica el numero de bits por muestra.
+    - `-`: Redirección del output hacia el pipeline.
+
+  * `$X2X`:Permite la conversión entre distintos formatos de datos. Por ejemplo pasar de un formato short (2 bytes) a un formato float (4 bytes) con la opcion `"+sf"` 
+  
+  * `$FRAME`:Extrae o divide la señal de entrada en tramas, indicando  la longitud del segmento en la que divide las muestras y el periodo de desplazamiento entre ellas. También se puede indicar si el punto de comienzo esta centrado o no.
+  
+    - `-l`: Número de muestras de cada trama. Su valor máximo es de 256.
+    - `-p`: Número de muestras de desplazamineto. Su valor máximo es de 100.
+
+  * `$WINDOW`:Pondera cada trama por una ventana.
+  
+    - `-l`: Tamaño de la ventana en su input. Su valor máximo es 256.
+    - `-L`: Tamaño de la ventana en su output. Su valor máximo es 256.
+    
+  * `$LPC`:Calcula los coeficientes de predicción lineal (LPC) de cada trama enventanada del fichero de entrada. Tanto la señal de entrada como la señal de salida tienen un formato float.
+    - `-l`: Longitud de trama. Máximo 256.
+    - `-m`: Númerode coeficientes LPC. Cmomo mucho 25.
+    - `-f`: Valor mínimo del determinante. Como mucho 10^-6.
+    - "output_file" : Fichero de salida
+  
+  En el script wav2lp.sh encontramos el siguiente pipeline principal:
+  
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+  sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+	$LPC -l 240 -m $lpc_order > $base.lp
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 - Explique el procedimiento seguido para obtener un fichero de formato *fmatrix* a partir de los ficheros de
   salida de SPTK (líneas 45 a 51 del script `wav2lp.sh`).
+  
+  
+Para conseguir la matriz fmatrix necesitamos calcular el número  de filas ($nrow) y columnas ($ncol), las columnas las calculamos con el orden del predictor y les sumamos 1($lpc_order+1) debido ya que en el primer elemento del vector de predicción se almacena la ganancia del predictor. Para determinar el número de filas, hemos de tener en cuenta la longitud de la señal y la lomgitud y desplazamiento de ventana que le aplicamos a dicha señal. Utilianzo el comando `sox` transformamos los datos del tipo float al tipo ascii y finalmente contamos las líneas con el comando wc-1 e imprimimos en pantalla, separando filas y columnas con un salto de línea usando "perl -ne".
+
+En el script wav2lp.sh encontramos el siguiente pipeline principal:
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+# Our array files need a header with the number of cols and rows:
+ncol=$((lpc_order+1)) # lpc p =>  (gain a1 a2 ... ap) 
+nrow=`$X2X +fa < $base.lp | wc -l | perl -ne 'print $_/'$ncol', "\n";'`
+
+# Build fmatrix file by placing nrow and ncol in front, and the data after them
+echo $nrow $ncol | $X2X +aI > $outputfile
+cat $base.lp >> $outputfile
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  
 
   * ¿Por qué es más conveniente el formato *fmatrix* que el SPTK?
 
