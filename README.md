@@ -186,9 +186,15 @@ cat $base.lp >> $outputfile
     plt.show()
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
+<img width="640" alt="lp" src="https://github.com/peremesquida/P4/blob/Estevez-Mesquida-Tarrats/pics/lp_2_3.png"> 
+
+<img width="640" alt="lpcc" src="https://github.com/peremesquida/P4/blob/Estevez-Mesquida-Tarrats/pics/lpcc_2_3.png"> 
+
+<img width="640" alt="mfcc" src="https://github.com/peremesquida/P4/blob/Estevez-Mesquida-Tarrats/pics/mfcc_2_3.png"> 
+    
   + ¿Cuál de ellas le parece que contiene más información?
   
-  Contra más incorrelado sea, mayor será la información de un coeficiente. En la representaciones vistas anteriormente, podemos observar diferencias entre los coeficientes 2 y 3, especialmente en el caso de LP (Fig. 1).
+  Contra más incorrelado sea, mayor será la información de un coeficiente. En la representaciones vistas anteriormente, podemos observar diferencias entre los coeficientes 2 y 3, especialmente en el caso de LP.
   Obsrevamos que en el caso de LP parece haber una correlación lineal entre coeficientes, por tanto tenemos poca información. 
   Por el contrario en el caso de LPCC y MFCC observamos una distribución en plano más dispersa y en forma de "elipse", por tanto con más información.             Finalemnte podemos decir que el caso de MFCC contiene más información, por su alta incorrelación y la poca dependencia entre coeficientes.
  
