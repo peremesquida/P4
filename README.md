@@ -187,17 +187,46 @@ cat $base.lp >> $outputfile
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
   + ¿Cuál de ellas le parece que contiene más información?
-
+  
+  Contra más incorrelado sea, mayor será la información de un coeficiente. En la representaciones vistas anteriormente, podemos observar diferencias entre los coeficientes 2 y 3, especialmente en el caso de LP (Fig. 1).
+  Obsrevamos que en el caso de LP parece haber una correlación lineal entre coeficientes, por tanto tenemos poca información. 
+  Por el contrario en el caso de LPCC y MFCC observamos una distribución en plano más dispersa y en forma de "elipse", por tanto con más información.             Finalemnte podemos decir que el caso de MFCC contiene más información, por su alta incorrelación y la poca dependencia entre coeficientes.
+ 
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
+  
+  Comandos ejecutados en el terminal para obtener los valores de &rho;<sub>x</sub>
+  
+  - LP:
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+    pearson work/lp/BLOCK01/SES017/*.lp | tee lp_pearson.txt
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    - LPCC:
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+    pearson work/lpcc/BLOCK01/SES017/*.lpcc | tee lpcc_pearson.txt
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    - MFCC:
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+    pearson work/mfcc/BLOCK01/SES017/*.mfcc | tee mfcc_pearson.txt
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+  El resultado de dichas ejecuciones es el siguiente
 
   |                        | LP   | LPCC | MFCC |
   |------------------------|:----:|:----:|:----:|
-  | &rho;<sub>x</sub>[2,3] |      |      |      |
+  | &rho;<sub>x</sub>[2,3] |   -0.8737   |  0,1670    |   0.1396   |
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
   
+  Los valores que obtenemos en &rho;<sub>x</sub>[2,3] nos indican que tan correlados son entre si, siendo el valor mas cercano a 1 (en valor absoluto) el mas correlado. 
+  Efectivamente concuerda con la explicación anteriormente dada donde en LP presenta un valor mas cercano al 1, aportandonos poca información. En el caso de LPCC y MFCC los valores han salido mas vien cercanos a 0, por tanto sus parametros muestran una incorelación entre si donde la información que nos brindan ambos parámetros es distinta a  la que nos proporciona uno solo.  
+  
+  
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
+
+	Para el LPCC: Un orden LPC de 14 (valor cercano a 13) y un orden del cepstrum de 21.
+	Para MFCC: 14 coeficientes (suele ser 13) y 40 filtros (suelen ser entre 24 y 40).
 
 ### Entrenamiento y visualización de los GMM.
 
@@ -213,6 +242,20 @@ Complete el código necesario para entrenar modelos GMM.
 ### Reconocimiento del locutor.
 
 Complete el código necesario para realizar reconociminto del locutor y optimice sus parámetros.
+
+Complete el código necesario para realizar reconociminto del locutor y optimice sus parámetros.
+
+Una vez completado el código y optimizado, hemos ejecutado las siguentes ordenes en el terminal:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+FEAT=lp run_spkid train classerr
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+FEAT=lpcc run_spkid train classerr
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+FEAT=mfcc run_spkid train classerr
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Inserte una tabla con la tasa de error obtenida en el reconocimiento de los locutores de la base de datos
   SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
@@ -230,6 +273,13 @@ Complete el código necesario para realizar verificación del locutor y optimice
 
 - Adjunte, en el repositorio de la práctica, los ficheros `class_test.log` y `verif_test.log` 
   correspondientes a la evaluación *ciega* final.
+  
+  Los ficheros correspondientes a la evaluación *ciega* final los hemos   creado a partir de ejecutar los siguientes comandos en el terminal:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh 
+FEAT=mfcc run_spkid finalclass
+FEAT=mfcc run_spkid finalverif  
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Trabajo de ampliación.
 
