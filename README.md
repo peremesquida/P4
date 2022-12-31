@@ -221,7 +221,7 @@ cat $base.lp >> $outputfile
 
   |                        | LP   | LPCC | MFCC |
   |------------------------|:----:|:----:|:----:|
-  | &rho;<sub>x</sub>[2,3] |   -0.8737   |  0,1670    |   0.1396   |
+  | &rho;<sub>x</sub>[2,3] |   -0.8737   |  0.1670    |   0.1396   |
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
   
@@ -258,15 +258,31 @@ Complete el código necesario para entrenar modelos GMM.
   del modelado GMM para diferenciar las señales de uno y otro.
   
 Usando los siguientes comandos hemos obtenido las graficas que nos permite comparar los modelos y poblaciones de SE009 y SE017.
+
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
   plot_gmm_feat -p 99,50,10 work/gmm/mfcc/SES017.gmm work/mfcc/BLOCK01/SES017/SA017S*
   plot_gmm_feat -p 99,50,10 -f blue work/gmm/mfcc/SES017.gmm work/mfcc/BLOCK00/SES009/SA009S*
   plot_gmm_feat -p 99,50,10 -g blue work/gmm/mfcc/SES009.gmm work/mfcc/BLOCK01/SES017/SA017S*
   plot_gmm_feat -p 99,50,10 -g blue -f blue work/gmm/mfcc/SES009.gmm work/mfcc/BLOCK00/SES009/SA009S*
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  la gráfica es la siguiente:
+
+  - GMM de SES017 y POBL de SES017
+  <img width="640" alt="lp" src="https://github.com/peremesquida/P4/blob/Estevez-Mesquida-Tarrats/pics/gmm_SES017_loc_SES017.png"> 
+  
+  - GMM de SES017 y POBL de SES009
+  <img width="640" alt="lp" src="https://github.com/peremesquida/P4/blob/Estevez-Mesquida-Tarrats/pics/gmm_SES017_loc_SES009.png"> 
+  
+  - GMM de SES009 y POBL de SES017	
+  <img width="640" alt="lp" src="https://github.com/peremesquida/P4/blob/Estevez-Mesquida-Tarrats/pics/gmm_SES009_loc_SES017.png"> 
+  
+  - GMM de SES009 y POBL de SES009
+  <img width="640" alt="lp" src="https://github.com/peremesquida/P4/blob/Estevez-Mesquida-Tarrats/pics/gmm_SES009_loc_SES009.png"> 
   
 Explicación
+Vemos las regiones con el 99%, 50% y 10% de la masa de probabilidad para los GMM de los locutores SES017 (en rojo, arriba) y SES009 (en azul, abajo), además mostramos la población del usuario SES017 (en rojo, izquierda) y SES009 (en azul, derecha).
+
+Para determinar que locutor y población coinciden, las regiones y las poblaciones deben coincidir, de modo que donde haya más concentración de población debe conicidir con los circulos de porcentage más pequeños.
+Podemos ver como en el caso en el que locutor y población coincidenm se cumple la lo anteriormente dicho. Por el contrario para "GMM de SES017 y POBL de SES009" y "GMM de SES009 y LOC de SES017" no concuerdan perfectamente las zonas de más densidad "poblacional" con las regiones de la masa de probabilidad de los GMM, especialmente para "GMM de SES017 y POBL de SES009".
 
 ### Reconocimiento del locutor.
 
@@ -293,9 +309,9 @@ FEAT=mfcc run_spkid train classerr
   
   |                        | LP   | LPCC | MFCC |
   |------------------------|:----:|:----:|:----:|
-  | Número de errores      |    |    |     |
-  | Número total           |   |   |   |
-  | Tasa de Error (%)      | |  |  |
+  | Número de errores      |  74  |  4  |   127  |
+  | Número total           |  785  |  785  |   785  |
+  | Tasa de Error (%)      |  9.43  |  0.51  |  16.18  |
   
 
 ### Verificación del locutor.
@@ -311,31 +327,55 @@ Complete el código necesario para realizar verificación del locutor y optimice
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh 
   run_spkid lp train test classerr trainworld verify verifyerr
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
- 
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+  
+==============================================
+THR: 0.461630024332798
+Missed:     85/250=0.3400
+FalseAlarm: 15/1000=0.0150
+----------------------------------------------
+==> CostDetection: 47.5
+==============================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
   
   - LPCC: 
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh 
   run_spkid lpcc train test classerr trainworld verify verifyerr
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
  
+==============================================
+THR: 0.199424222138397
+Missed:     8/250=0.0320
+FalseAlarm: 5/1000=0.0050
+----------------------------------------------
+==> CostDetection: 7.7
+==============================================
+
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    - MFCC:  
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh 
   run_spkid mfcc train test classerr trainworld verify verifyerr
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+  
+==============================================
+THR: 1.94501667753918
+Missed:     184/250=0.7360
+FalseAlarm: 1/1000=0.0010
+----------------------------------------------
+==> CostDetection: 74.5
+==============================================
 
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  Finalmente concluimos diciendo que el mejor sistema de verificación en nuestro caso es con MFCC.
+  Finalmente concluimos diciendo que el mejor sistema de verificación en nuestro caso es con LPCC.
   Podemos ver una comparartiva a continuación:
 
   |                        | LP   | LPCC | MFCC |
   |------------------------|:----:|:----:|:----:|
-  | CostDectection         |  |  |  |
+  | CostDectection         | 47.5 | 7.7 | 74.5 |
 
   
  
