@@ -160,7 +160,7 @@ cat $base.lp >> $outputfile
       X.append(values[0])
       Y.append(values[1])
     plt.figure(2)
-    plt.plot(X, Y, 'rx', markersize=4)
+    plt.plot(X, Y, 'bx', markersize=4)
     plt.savefig('lpcc_2_3.png')
     plt.title('LPCC',fontsize=20)
     plt.grid()
@@ -176,7 +176,7 @@ cat $base.lp >> $outputfile
       X.append(values[0])
       Y.append(values[1])
     plt.figure(3)
-    plt.plot(X, Y, 'rx', markersize=4)
+    plt.plot(X, Y, 'gx', markersize=4)
     plt.savefig('mfcc_2_3.png')
     plt.title('MFCC',fontsize=20)
     plt.grid()
@@ -207,12 +207,12 @@ cat $base.lp >> $outputfile
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
     pearson work/lp/BLOCK01/SES017/*.lp | tee lp_pearson.txt
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    - LPCC:
+  - LPCC:
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
     pearson work/lpcc/BLOCK01/SES017/*.lpcc | tee lpcc_pearson.txt
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    - MFCC:
+  - MFCC:
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
     pearson work/mfcc/BLOCK01/SES017/*.mfcc | tee mfcc_pearson.txt
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -240,10 +240,33 @@ Complete el código necesario para entrenar modelos GMM.
 
 - Inserte una gráfica que muestre la función de densidad de probabilidad modelada por el GMM de un locutor
   para sus dos primeros coeficientes de MFCC.
+  
+  Ordenes ejecutadas en el terminal para la obtenicón de la grafica:
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+  FEAT=mfcc run_spkid train
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+  gmm_train -d work/mfcc -e mfcc -g SES009.gmm lists/class/SES009.train
+  plot_gmm_feat work/gmm/mfcc/SES009.gmm
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  
+
+
 
 - Inserte una gráfica que permita comparar los modelos y poblaciones de dos locutores distintos (la gŕafica
   de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad
   del modelado GMM para diferenciar las señales de uno y otro.
+  
+Usando los siguientes comandos hemos obtenido las graficas que nos permite comparar los modelos y poblaciones de SE009 y SE017.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+  plot_gmm_feat -p 99,50,10 work/gmm/mfcc/SES017.gmm work/mfcc/BLOCK01/SES017/SA017S*
+  plot_gmm_feat -p 99,50,10 -f blue work/gmm/mfcc/SES017.gmm work/mfcc/BLOCK00/SES009/SA009S*
+  plot_gmm_feat -p 99,50,10 -g blue work/gmm/mfcc/SES009.gmm work/mfcc/BLOCK01/SES017/SA017S*
+  plot_gmm_feat -p 99,50,10 -g blue -f blue work/gmm/mfcc/SES009.gmm work/mfcc/BLOCK00/SES009/SA009S*
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  la gráfica es la siguiente:
+  
+Explicación
 
 ### Reconocimiento del locutor.
 
@@ -251,7 +274,7 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
 
 Complete el código necesario para realizar reconociminto del locutor y optimice sus parámetros.
 
-Una vez completado el código y optimizado, hemos ejecutado las siguentes ordenes en el terminal:
+Finalmente con el codigo optimizado y completado hemos ejecutado las siguentes ordenes en el terminal:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
 FEAT=lp run_spkid train classerr
@@ -265,6 +288,15 @@ FEAT=mfcc run_spkid train classerr
 
 - Inserte una tabla con la tasa de error obtenida en el reconocimiento de los locutores de la base de datos
   SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
+  
+  
+  
+  |                        | LP   | LPCC | MFCC |
+  |------------------------|:----:|:----:|:----:|
+  | Número de errores      |    |    |     |
+  | Número total           |   |   |   |
+  | Tasa de Error (%)      | |  |  |
+  
 
 ### Verificación del locutor.
 
@@ -274,6 +306,38 @@ Complete el código necesario para realizar verificación del locutor y optimice
   de verificación de SPEECON. La tabla debe incluir el umbral óptimo, el número de falsas alarmas y de
   pérdidas, y el score obtenido usando la parametrización que mejor resultado le hubiera dado en la tarea
   de reconocimiento.
+  
+  - LP:  
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh 
+  run_spkid lp train test classerr trainworld verify verifyerr
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+ 
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  
+  - LPCC: 
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh 
+  run_spkid lpcc train test classerr trainworld verify verifyerr
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+ 
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   - MFCC:  
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh 
+  run_spkid mfcc train test classerr trainworld verify verifyerr
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
+
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Finalmente concluimos diciendo que el mejor sistema de verificación en nuestro caso es con MFCC.
+  Podemos ver una comparartiva a continuación:
+
+  |                        | LP   | LPCC | MFCC |
+  |------------------------|:----:|:----:|:----:|
+  | CostDectection         |  |  |  |
+
+  
  
 ### Test final
 
