@@ -194,7 +194,7 @@ cat $base.lp >> $outputfile
     
   + ¿Cuál de ellas le parece que contiene más información?
   
-  Contra más incorrelado sea, mayor será la información de un coeficiente. En la representaciones vistas anteriormente, podemos observar diferencias entre los coeficientes 2 y 3, especialmente en el caso de LP.
+  Contra más incorrelado sea mayor será la información de un coeficiente. En la representaciones vistas anteriormente, podemos observar diferencias entre los coeficientes 2 y 3, especialmente en el caso de LP.
   Obsrevamos que en el caso de LP parece haber una correlación lineal entre coeficientes, por tanto tenemos poca información. 
   Por el contrario en el caso de LPCC y MFCC observamos una distribución en plano más dispersa y en forma de "elipse", por tanto con más información.             Finalemnte podemos decir que el caso de MFCC contiene más información, por su alta incorrelación y la poca dependencia entre coeficientes.
  
@@ -232,6 +232,7 @@ cat $base.lp >> $outputfile
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
 
 	Para el LPCC: Un orden LPC de 14 (valor cercano a 13) y un orden del cepstrum de 21.
+	
 	Para MFCC: 14 coeficientes (suele ser 13) y 40 filtros (suelen ser entre 24 y 40).
 
 ### Entrenamiento y visualización de los GMM.
@@ -257,7 +258,7 @@ Complete el código necesario para entrenar modelos GMM.
   de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad
   del modelado GMM para diferenciar las señales de uno y otro.
   
-Usando los siguientes comandos hemos obtenido las graficas que nos permite comparar los modelos y poblaciones de SE009 y SE017.
+Usando los siguientes comandos, hemos obtenido las graficas que nos permite comparar los modelos y poblaciones de SE009 y SE017.
 
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
   plot_gmm_feat -p 99,50,10 work/gmm/mfcc/SES017.gmm work/mfcc/BLOCK01/SES017/SA017S*
