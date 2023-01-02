@@ -195,8 +195,8 @@ cat $base.lp >> $outputfile
   + ¿Cuál de ellas le parece que contiene más información?
   
   Contra más incorrelado sea mayor será la información de un coeficiente. En la representaciones vistas anteriormente, podemos observar diferencias entre los coeficientes 2 y 3, especialmente en el caso de LP.
-  Obsrevamos que en el caso de LP parece haber una correlación lineal entre coeficientes, por tanto tenemos poca información. 
-  Por el contrario en el caso de LPCC y MFCC observamos una distribución en plano más dispersa y en forma de "elipse", por tanto con más información.             Finalemnte podemos decir que el caso de MFCC contiene más información, por su alta incorrelación y la poca dependencia entre coeficientes.
+  Observamos que en el caso de LP parece haber una correlación lineal entre coeficientes, por tanto tenemos poca información. 
+  Por el contrario en el caso de LPCC y MFCC observamos una distribución en plano más dispersa y en forma de "elipse", por tanto con más información.             Finalmente podemos decir que el caso de MFCC contiene más información, por su alta incorrelación y la poca dependencia entre coeficientes.
  
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
@@ -225,8 +225,8 @@ cat $base.lp >> $outputfile
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
   
-  Los valores que obtenemos en &rho;<sub>x</sub>[2,3] nos indican que tan correlados son entre si, siendo el valor mas cercano a 1 (en valor absoluto) el mas correlado. 
-  Efectivamente concuerda con la explicación anteriormente dada donde en LP presenta un valor mas cercano al 1, aportandonos poca información. En el caso de LPCC y MFCC los valores han salido mas vien cercanos a 0, por tanto sus parametros muestran una incorelación entre si donde la información que nos brindan ambos parámetros es distinta a  la que nos proporciona uno solo.  
+  Los valores que obtenemos en &rho;<sub>x</sub>[2,3] nos indican que tan correlados son entre sí, siendo el valor mas cercano a 1 (en valor absoluto) el mas correlado. 
+  Efectivamente concuerda con la explicación anteriormente dada donde en LP presenta un valor mas cercano al 1, aportandonos poca información. En el caso de LPCC y MFCC los valores han salido mas cercanos a 0, por tanto, sus parametros muestran una incorelación entre sí donde la información que nos brindan ambos parámetros es distinta a la que nos proporciona uno solo.  
   
   
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
@@ -258,7 +258,7 @@ Complete el código necesario para entrenar modelos GMM.
   de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad
   del modelado GMM para diferenciar las señales de uno y otro.
   
-Usando los siguientes comandos, hemos obtenido las graficas que nos permite comparar los modelos y poblaciones de SE009 y SE017.
+Usando los siguientes comandos, hemos obtenido las gráficas que nos permiten comparar los modelos y poblaciones de SE009 y SE017.
 
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.sh
   plot_gmm_feat -p 99,50,10 work/gmm/mfcc/SES017.gmm work/mfcc/BLOCK01/SES017/SA017S*
@@ -283,7 +283,7 @@ Explicación
 Vemos las regiones con el 99%, 50% y 10% de la masa de probabilidad para los GMM de los locutores SES017 (en rojo, arriba) y SES009 (en azul, abajo), además mostramos la población del usuario SES017 (en rojo, izquierda) y SES009 (en azul, derecha).
 
 Para determinar que locutor y población coinciden, las regiones y las poblaciones deben coincidir, de modo que donde haya más concentración de población debe conicidir con los circulos de porcentage más pequeños.
-Podemos ver como en el caso en el que locutor y población coincidenm se cumple la lo anteriormente dicho. Por el contrario para "GMM de SES017 y POBL de SES009" y "GMM de SES009 y LOC de SES017" no concuerdan perfectamente las zonas de más densidad "poblacional" con las regiones de la masa de probabilidad de los GMM, especialmente para "GMM de SES017 y POBL de SES009".
+Podemos ver como en el caso en el que locutor y población coinciden, se cumple lo anteriormente dicho. Por el contrario para "GMM de SES017 y POBL de SES009" y "GMM de SES009 y LOC de SES017" no concuerdan perfectamente las zonas de más densidad "poblacional" con las regiones de la masa de probabilidad de los GMM, especialmente para "GMM de SES017 y POBL de SES009".
 
 ### Reconocimiento del locutor.
 
@@ -371,7 +371,7 @@ FalseAlarm: 1/1000=0.0010
 
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  Finalmente concluimos diciendo que el mejor sistema de verificación en nuestro caso es con LPCC.
+  Finalmente, podemos ver que el mejor sistema de verificación en nuestro caso es con LPCC.
   Podemos ver una comparartiva a continuación:
 
   |                        | LP   | LPCC | MFCC |
