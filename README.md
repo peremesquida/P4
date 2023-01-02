@@ -70,7 +70,7 @@ ejercicios indicados.
   salida de SPTK (líneas 45 a 51 del script `wav2lp.sh`).
   
   
-Para conseguir la matriz fmatrix necesitamos calcular el número  de filas ($nrow) y columnas ($ncol), las columnas las calculamos con el orden del predictor y les sumamos 1($lpc_order+1) debido ya que en el primer elemento del vector de predicción se almacena la ganancia del predictor. Para determinar el número de filas, hemos de tener en cuenta la longitud de la señal y la lomgitud y desplazamiento de ventana que le aplicamos a dicha señal. Utilianzo el comando `sox` transformamos los datos del tipo float al tipo ascii y finalmente contamos las líneas con el comando <code>wc-1</code> e imprimimos en pantalla, separando filas y columnas con un salto de línea usando <code>perl -ne</code>.
+Para conseguir la matriz fmatrix necesitamos calcular el número  de filas ($nrow) y columnas ($ncol), las columnas las calculamos con el orden del predictor y les sumamos 1($lpc_order+1) debido ya que en el primer elemento del vector de predicción se almacena la ganancia del predictor. Para determinar el número de filas, hemos de tener en cuenta la longitud de la señal y la longitud y desplazamiento de ventana que le aplicamos a dicha señal. Utilianzo el comando `sox` transformamos los datos del tipo float al tipo ascii y finalmente contamos las líneas con el comando <code>wc-1</code> e imprimimos en pantalla, separando filas y columnas con un salto de línea usando <code>perl -ne</code>.
 
 En el script wav2lp.sh encontramos el siguiente pipeline principal:
 
